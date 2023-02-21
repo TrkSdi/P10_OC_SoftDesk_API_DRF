@@ -48,5 +48,17 @@ class Issues(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     
 class Contributors(models.Model):
-    
+    # Revoir 'user'
+    # Revoir permission, role
     user_id = models.ForeignKey('User', on_delete=models.CASCADE)
+    project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
+    permission = models.BooleanField(default=False)
+    role = models.CharField(max_length=20)
+
+class Comments(models.Model):
+    
+    description = models.CharField(max_length=800)
+    author_user_id = models.ForeignKey('User', on_delete=models.CASCADE)
+    issue_id = models.ForeignKey(Issues, on_delete=models.CASCADE)
+    created_time = models.DateTimeField(auto_now_add=True)
+    
