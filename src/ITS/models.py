@@ -47,4 +47,6 @@ class Issues(models.Model):
     assignee_us_id = models.ForeignKey('User', on_delete=models.CASCADE, default='User')
     created_time = models.DateTimeField(auto_now_add=True)
     
+class Contributors(models.Model):
     
+    user_id = models.ForeignKey('User', on_delete=models.CASCADE)
