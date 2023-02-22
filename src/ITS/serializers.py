@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from models import Comments, Contributors, Issues, Project
+from ITS.models import Comments, Contributors, Issues, Project
 
 
 class CommentsSerializer(ModelSerializer):
