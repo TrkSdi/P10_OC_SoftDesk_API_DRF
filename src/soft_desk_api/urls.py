@@ -17,13 +17,20 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 
-from ITS.views import ProjectViewset, IssuesViewset, ContributorsViewset, CommentsViewset 
+from ITS.views import (ProjectViewset, IssuesViewset, 
+                       ContributorsViewset, CommentsViewset,
+                       AdminProjectViewset, AdminContribViewset,
+                       AdminIssuesViewset, AdminCommentsViewset)
 
 router = routers.SimpleRouter()
 router.register('project', ProjectViewset, basename='project')
 router.register('issues', IssuesViewset, basename='issues')
 router.register('contributors', ContributorsViewset, basename='contributors')
 router.register('comments', CommentsViewset, basename='comments')
+router.register('admin/project', AdminProjectViewset, basename ='admin-project')
+router.register('admin/contributors', AdminContribViewset, basename ='admin-contrib')
+router.register('admin/issues', AdminIssuesViewset, basename ='admin-issues')
+router.register('admin/comments', AdminCommentsViewset, basename ='admin-comments')
 
 
 urlpatterns = [
