@@ -33,9 +33,6 @@ class CommentsViewset(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Comments.objects.all()
 
-# ,
-# , AdminCommentsViewset
-
 class AdminProjectViewset(ModelViewSet):
     
     serializer_class = ProjectSerializer
