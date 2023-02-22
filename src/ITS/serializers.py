@@ -26,6 +26,7 @@ class IssuesSerializer(ModelSerializer):
     class Meta:
         model = Issues
         fields = ['id',
+                  'title',
                   'description',
                   'tag',
                   'priority',
