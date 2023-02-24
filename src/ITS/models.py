@@ -67,3 +67,4 @@ class Comments(models.Model):
     issue_id = models.ForeignKey(Issues, on_delete=models.CASCADE, null=True, blank=True, default=None)
     created_time = models.DateTimeField(auto_now_add=True)
     
+    # enlenver _id sur les fields 

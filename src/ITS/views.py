@@ -34,39 +34,7 @@ class ContributorsViewset(ReadOnlyModelViewSet):
 class CommentsViewset(ReadOnlyModelViewSet):
     
     serializer_class = CommentsSerializer
-    permission_classes = [IsAuthenticated]
-    
-    def get_queryset(self):
-        return Comments.objects.all()
-
-class AdminProjectViewset(ModelViewSet):
-    
-    serializer_class = ProjectSerializer
-    permission_classes = [IsAdminAuthenticated]
-    
-    def get_queryset(self):
-        return Project.objects.all()
-
-class AdminContribViewset(ModelViewSet):
-    
-    serializer_class = ContributorsSerializer
-    permission_classes = [IsAdminAuthenticated]
-    
-    def get_queryset(self):
-        return Contributors.objects.all()
-
-class AdminIssuesViewset(ModelViewSet):
-    
-    serializer_class = IssuesSerializer
-    permission_classes = [IsAdminAuthenticated]
-    
-    def get_queryset(self):
-        return Issues.objects.all()
-
-class AdminCommentsViewset(ModelViewSet):
-    
-    serializer_class = CommentsSerializer
-    permission_classes = [IsAdminAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminAuthenticated]
     
     def get_queryset(self):
         return Comments.objects.all()
