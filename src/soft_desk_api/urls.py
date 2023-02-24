@@ -18,14 +18,16 @@ from django.urls import include, path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from auth.views import UserViewset, RegisterView
 from ITS.views import (ProjectViewset, IssuesViewset, 
-                       ContributorsViewset, CommentsViewset)
+                       ContributorsViewset, CommentsViewset,)
 
 router = routers.SimpleRouter()
 router.register('project', ProjectViewset, basename='project')
 router.register('issues', IssuesViewset, basename='issue')
 router.register('contributors', ContributorsViewset, basename='contributor')
 router.register('comments', CommentsViewset, basename='comment')
+router.register('user', UserViewset, basename='user')
 
 
 
@@ -34,5 +36,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    path('api/signup/', RegisterView, name='register'),
 ]

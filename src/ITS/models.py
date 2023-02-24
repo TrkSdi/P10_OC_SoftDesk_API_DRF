@@ -30,6 +30,9 @@ class Contributor(models.Model):
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, null=True, blank=True)
     permission = models.CharField(max_length=20, choices=PERMISSION, default='USER')
     role = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return f"Contributor: {self.user}"
 
 class Issue(models.Model):
     TAG = [
@@ -59,6 +62,9 @@ class Issue(models.Model):
     author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author', null=True, blank=True, default=None)
     assignee_us = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assignee', null=True, blank=True, default=None)
     created_time = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title
 
 class Comment(models.Model):
     
@@ -66,3 +72,6 @@ class Comment(models.Model):
     author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True, default=None)
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=True, blank=True, default=None)
     created_time = models.DateTimeField(auto_now_add=True) 
+    
+    def __str__(self):
+        return f"Author: {self.author_user}"
