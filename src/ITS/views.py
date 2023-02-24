@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from auth.permissions import IsAdminAuthenticated
 from .serializers import ProjectSerializer, IssuesSerializer, ContributorsSerializer, CommentsSerializer
-from ITS.models import Project, Issues, Contributors, Comments
+from ITS.models import Project, Issue, Contributor, Comment
 
 
 class ProjectViewset(ReadOnlyModelViewSet):
@@ -21,7 +21,7 @@ class IssuesViewset(ReadOnlyModelViewSet):
     permission_classes = []
     
     def get_queryset(self):
-        return Issues.objects.all()
+        return Issue.objects.all()
     
 class ContributorsViewset(ReadOnlyModelViewSet):
     
@@ -29,7 +29,7 @@ class ContributorsViewset(ReadOnlyModelViewSet):
     permission_classes = []
     
     def get_queryset(self):
-        return Contributors.objects.all()
+        return Contributor.objects.all()
 
 class CommentsViewset(ReadOnlyModelViewSet):
     
@@ -37,4 +37,4 @@ class CommentsViewset(ReadOnlyModelViewSet):
     permission_classes = []
     
     def get_queryset(self):
-        return Comments.objects.all()
+        return Comment.objects.all()

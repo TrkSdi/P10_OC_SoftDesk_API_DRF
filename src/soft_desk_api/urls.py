@@ -23,9 +23,9 @@ from ITS.views import (ProjectViewset, IssuesViewset,
 
 router = routers.SimpleRouter()
 router.register('project', ProjectViewset, basename='project')
-router.register('issues', IssuesViewset, basename='issues')
-router.register('contributors', ContributorsViewset, basename='contributors')
-router.register('comments', CommentsViewset, basename='comments')
+router.register('issues', IssuesViewset, basename='issue')
+router.register('contributors', ContributorsViewset, basename='contributor')
+router.register('comments', CommentsViewset, basename='comment')
 
 
 

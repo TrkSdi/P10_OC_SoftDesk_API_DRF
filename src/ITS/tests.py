@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from rest_framework.test import APITestCase
 
-from .models import Project, Issues, Contributors, Comments
+from .models import Project, Issue, Contributor, Comment
 
 class TestProject(APITestCase):
     
@@ -39,7 +39,7 @@ class TestIssues(APITestCase):
 
     def test_list(self):
         # Create an issue
-        issues = Issues.objects.create(title='issue_01')
+        issues = Issue.objects.create(title='issue_01')
         
         response = self.client.get(self.url)
 
@@ -62,17 +62,17 @@ class TestIssues(APITestCase):
 
     def test_create(self):
         
-        self.assertFalse(Issues.objects.exists())
+        self.assertFalse(Issue.objects.exists())
         response = self.client.post(self.url, data={'title': 'New issue'})
         self.assertEqual(response.status_code, 405)
-        self.assertFalse(Issues.objects.exists())
+        self.assertFalse(Issue.objects.exists())
 
 class TestContributors(APITestCase):
     url = reverse_lazy('contributors-list')
 
     def test_list(self):
         
-        contributors = Contributors.objects.create()
+        contributors = Contributor.objects.create()
         
         response = self.client.get(self.url)
 
@@ -91,10 +91,10 @@ class TestContributors(APITestCase):
 
     def test_create(self):
         
-        self.assertFalse(Contributors.objects.exists())
+        self.assertFalse(Contributor.objects.exists())
         response = self.client.post(self.url, data={'role': 'New role'})
         self.assertEqual(response.status_code, 405)
-        self.assertFalse(Contributors.objects.exists())
+        self.assertFalse(Contributor.objects.exists())
     
 class TestComments(APITestCase):
     url = reverse_lazy('comments-list')
@@ -104,7 +104,7 @@ class TestComments(APITestCase):
 
     def test_list(self):
         
-        comments = Comments.objects.create(description='comments_01')
+        comments = Comment.objects.create(description='comments_01')
         
         response = self.client.get(self.url)
         
@@ -123,7 +123,7 @@ class TestComments(APITestCase):
 
     def test_create(self):
         
-        self.assertFalse(Comments.objects.exists())
+        self.assertFalse(Comment.objects.exists())
         response = self.client.post(self.url, data={'description': 'new comment'})
         self.assertEqual(response.status_code, 405)
-        self.assertFalse(Comments.objects.exists())
+        self.assertFalse(Comment.objects.exists())

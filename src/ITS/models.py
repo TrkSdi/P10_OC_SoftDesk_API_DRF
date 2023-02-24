@@ -19,7 +19,7 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-class Contributors(models.Model):
+class Contributor(models.Model):
     # Revoir permission, role
     PERMISSION = [
         ('USER', 'USER'),
@@ -31,7 +31,7 @@ class Contributors(models.Model):
     permission = models.CharField(max_length=20, choices=PERMISSION, default='USER')
     role = models.CharField(max_length=20)
 
-class Issues(models.Model):
+class Issue(models.Model):
     TAG = [
         ('BUG', 'BUG'),
         ('AMELIORATION', 'AMELIORATION'),
@@ -60,9 +60,9 @@ class Issues(models.Model):
     assignee_us = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assignee', null=True, blank=True, default=None)
     created_time = models.DateTimeField(auto_now_add=True)
 
-class Comments(models.Model):
+class Comment(models.Model):
     
     description = models.CharField(max_length=800)
     author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True, default=None)
-    issue = models.ForeignKey(Issues, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=True, blank=True, default=None)
     created_time = models.DateTimeField(auto_now_add=True) 

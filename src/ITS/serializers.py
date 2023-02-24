@@ -1,11 +1,11 @@
 from rest_framework.serializers import ModelSerializer
-from ITS.models import Comments, Contributors, Issues, Project
+from ITS.models import Comment, Contributor, Issue, Project
 
 
 class CommentsSerializer(ModelSerializer):
     
     class Meta:
-        model = Comments
+        model = Comment
         fields = ['id',
                   'description',
                   'author_user',
@@ -15,7 +15,7 @@ class CommentsSerializer(ModelSerializer):
 class ContributorsSerializer(ModelSerializer):
     
     class Meta:
-        model = Contributors
+        model = Contributor
         fields = ['id',
                   'user',
                   'project',
@@ -25,7 +25,7 @@ class ContributorsSerializer(ModelSerializer):
 class IssuesSerializer(ModelSerializer):
     
     class Meta:
-        model = Issues
+        model = Issue
         fields = ['id',
                   'title',
                   'description',
