@@ -10,7 +10,7 @@ from ITS.models import Project, Issues, Contributors, Comments
 class ProjectViewset(ReadOnlyModelViewSet):
     
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     
     def get_queryset(self):
         return Project.objects.all()
@@ -18,7 +18,7 @@ class ProjectViewset(ReadOnlyModelViewSet):
 class IssuesViewset(ReadOnlyModelViewSet):
     
     serializer_class = IssuesSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     
     def get_queryset(self):
         return Issues.objects.all()
@@ -26,7 +26,7 @@ class IssuesViewset(ReadOnlyModelViewSet):
 class ContributorsViewset(ReadOnlyModelViewSet):
     
     serializer_class = ContributorsSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     
     def get_queryset(self):
         return Contributors.objects.all()
@@ -34,7 +34,7 @@ class ContributorsViewset(ReadOnlyModelViewSet):
 class CommentsViewset(ReadOnlyModelViewSet):
     
     serializer_class = CommentsSerializer
-    permission_classes = [IsAuthenticated, IsAdminAuthenticated]
+    permission_classes = []
     
     def get_queryset(self):
         return Comments.objects.all()

@@ -8,16 +8,17 @@ class CommentsSerializer(ModelSerializer):
         model = Comments
         fields = ['id',
                   'description',
-                  'author_user_id',
-                  'issue_id',
+                  'author_user',
+                  'issue',
                   'created_time'] 
 
 class ContributorsSerializer(ModelSerializer):
     
     class Meta:
         model = Contributors
-        fields = ['user_id',
-                  'project_id',
+        fields = ['id',
+                  'user',
+                  'project',
                   'permission',
                   'role']
 
@@ -30,10 +31,10 @@ class IssuesSerializer(ModelSerializer):
                   'description',
                   'tag',
                   'priority',
-                  'project_id',
+                  'project',
                   'status',
-                  'author_user_id',
-                  'assignee_us_id',
+                  'author_user',
+                  'assignee_us',
                   'created_time']
         
 class ProjectSerializer(ModelSerializer):
@@ -44,4 +45,4 @@ class ProjectSerializer(ModelSerializer):
                   'title',
                   'description',
                   'project_type',
-                  'author_user_id']
+                  'author_user']
