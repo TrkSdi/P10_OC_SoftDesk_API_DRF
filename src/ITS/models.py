@@ -27,7 +27,7 @@ class Contributor(models.Model):
     ]
     
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    project = models.ForeignKey(to=Project, on_delete=models.CASCADE, null=True, blank=True)
+    project = models.ForeignKey(to=Project, on_delete=models.CASCADE, null=True, blank=True, related_name='contributor')
     permission = models.CharField(max_length=20, choices=PERMISSION, default='USER')
     role = models.CharField(max_length=20)
     
@@ -57,7 +57,7 @@ class Issue(models.Model):
     description = models.CharField(max_length=800)
     tag = models.CharField(max_length=50, choices=TAG)
     priority = models.CharField(max_length=50, choices=PRIORITY)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='issue')
     status = models.CharField(max_length=50, choices=STATUS)
     author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author', null=True, blank=True, default=None)
     assignee_us = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assignee', null=True, blank=True, default=None)

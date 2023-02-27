@@ -3,27 +3,25 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
 from auth.permissions import IsAdminAuthenticated
-from .serializers import ProjectSerializer, IssuesSerializer, ContributorsSerializer, CommentsSerializer
+from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
+                          IssuesSerializer, ContributorsSerializer, CommentsSerializer)
 from ITS.models import Project, Issue, Contributor, Comment
 
 
-class MultipleSerializerMixin:
+class ProjectViewset(ModelViewSet):
     
-    detail_serializer_class = None
+    serializer_class = ProjectListSerializer
+    detail_serializer_class = ProjectDetailSerializer
     
-    def get_serializer_class(self):
-        if self.action == 'retrieve' and self.detail_serializer_class is not None:
-            return self.detail_serializer_class
-        return super().get_serializer_class()
-
-
-class ProjectViewset(ReadOnlyModelViewSet):
-    
-    serializer_class = ProjectSerializer
-    permission_classes = []
     
     def get_queryset(self):
         return Project.objects.all()
+    
+    def get_serializer_class(self):
+    
+        if self.action == 'retrieve':
+            return self.detail_serializer_class
+        return super().get_serializer_class()
     
 class IssuesViewset(ReadOnlyModelViewSet):
     
@@ -33,7 +31,7 @@ class IssuesViewset(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Issue.objects.all()
     
-class ContributorsViewset(ReadOnlyModelViewSet):
+class ContributorsViewset(ModelViewSet):
     
     serializer_class = ContributorsSerializer
     permission_classes = []

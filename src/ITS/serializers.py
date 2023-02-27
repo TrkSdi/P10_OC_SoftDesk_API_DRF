@@ -37,8 +37,24 @@ class IssuesSerializer(ModelSerializer):
                   'assignee_us',
                   'created_time']
         
-class ProjectSerializer(ModelSerializer):
+class ProjectDetailSerializer(ModelSerializer):
     
+    issue = IssuesSerializer(many=True)
+    contributor = ContributorsSerializer(many=True)
+    
+    class Meta:
+        model = Project
+        fields = ['id',
+                  'title',
+                  'description',
+                  'project_type',
+                  'author_user',
+                  'issue',
+                  'contributor'
+                  ]
+
+class ProjectListSerializer(ModelSerializer):
+        
     class Meta:
         model = Project
         fields = ['id',
