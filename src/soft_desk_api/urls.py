@@ -19,13 +19,14 @@ from rest_framework_nested import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from auth.views import UserViewset, RegisterView
-from ITS.views import (ProjectViewset)
+from ITS.views import (ProjectViewset, ContributorsViewset)
 
 router = routers.SimpleRouter()
 router.register('project', ProjectViewset, basename='project')
 # /project/
 # /project/{pk}/
 project_router = routers.NestedSimpleRouter(router, 'project', lookup='project')
+project_router.register('users', ContributorsViewset, basename='contributor')
 
 
 urlpatterns = [
@@ -37,5 +38,5 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
     path('api/', include(router.urls)),
-    path('api/', include(router.urls)),
+    path('api/', include(project_router.urls)),
 ]
