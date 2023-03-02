@@ -5,8 +5,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-
-
 from auth.models import User
 from auth.serializers import UserSerializer, RegisterSerializer
 
@@ -36,3 +34,4 @@ def RegisterView(request):
         data = serializer.errors
     
     return Response(data)
+

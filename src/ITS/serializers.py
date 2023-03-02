@@ -18,7 +18,6 @@ class ContributorsSerializer(ModelSerializer):
         model = Contributor
         fields = ['id',
                   'user',
-                  'project',
                   'permission',
                   'role']
 
@@ -39,8 +38,8 @@ class IssuesSerializer(ModelSerializer):
         
 class ProjectDetailSerializer(ModelSerializer):
     
-    issue = IssuesSerializer(many=True)
-    contributor = ContributorsSerializer(many=True)
+    issue = IssuesSerializer(many=True, read_only=True)
+    contributor = ContributorsSerializer(many=True, read_only=True)
     
     class Meta:
         model = Project

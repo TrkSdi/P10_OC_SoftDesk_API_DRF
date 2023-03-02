@@ -19,13 +19,13 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from auth.views import UserViewset, RegisterView
-from ITS.views import (ProjectViewset, IssuesViewset, 
-                       ContributorsViewset, CommentsViewset,)
+from ITS.views import (ProjectListViewset, ProjectDetailViewset, IssuesViewset, 
+                       ContributorsViewset, DeleteContributorViewSet, CommentsViewset)
 
 router = routers.SimpleRouter()
-router.register('project', ProjectViewset, basename='project')
-router.register('issues', IssuesViewset, basename='issue')
-router.register('contributors', ContributorsViewset, basename='contributor')
+#router.register('project', ProjectListViewset.as_view(), basename='project')
+#router.register('issues', IssuesViewset, basename='issue')
+#router.register('contributors', ContributorsViewset, basename='contributor')
 router.register('comments', CommentsViewset, basename='comment')
 router.register('user', UserViewset, basename='user')
 
@@ -34,8 +34,15 @@ router.register('user', UserViewset, basename='user')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
+    path('api/signup/', RegisterView, name='register'),
+    
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
     path('api/', include(router.urls)),
-    path('api/signup/', RegisterView, name='register'),
+    path('api/project/', ProjectListViewset.as_view(), name='project-list'),
+    path('api/project/<int:pk>/', ProjectDetailViewset.as_view(), name='project-detail'),
+    path('api/project/<int:project_id>/users/', ContributorsViewset.as_view(), name='contributors-list'),
+    path('api/project/<int:project_id>/issues/', IssuesViewset.as_view(), name='issue-list'),
+    path('api/project/<int:pk>/users/<int:user_id>/', DeleteContributorViewSet.as_view(), name='contributors-delete')
 ]

@@ -3,6 +3,7 @@ from django.db import models
 
 
 
+
 class Project(models.Model):
     TYPE = [
         ('back-end', 'back-end'),
@@ -32,7 +33,7 @@ class Contributor(models.Model):
     role = models.CharField(max_length=20)
     
     def __str__(self):
-        return f"Contributor: {self.user}"
+        return f"Contributor: {self.user} / Projet: {self.project}"
 
 class Issue(models.Model):
     TAG = [
