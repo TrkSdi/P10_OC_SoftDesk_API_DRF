@@ -15,20 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework import routers
+from rest_framework_nested import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from auth.views import UserViewset, RegisterView
-from ITS.views import (ProjectListViewset, ProjectDetailViewset, IssuesViewset, 
-                       ContributorsViewset, DeleteContributorViewSet, CommentsViewset)
+from ITS.views import (ProjectViewset)
 
 router = routers.SimpleRouter()
-#router.register('project', ProjectListViewset.as_view(), basename='project')
-#router.register('issues', IssuesViewset, basename='issue')
-#router.register('contributors', ContributorsViewset, basename='contributor')
-#router.register('comments', CommentsViewset, basename='comment')
-router.register('user', UserViewset, basename='user')
-
+router.register('project', ProjectViewset, basename='project')
+# /project/
+# /project/{pk}/
+project_router = routers.NestedSimpleRouter(router, 'project', lookup='project')
 
 
 urlpatterns = [
@@ -40,10 +37,5 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
     path('api/', include(router.urls)),
-    path('api/project/', ProjectListViewset.as_view(), name='project-list'),
-    path('api/project/<int:pk>/', ProjectDetailViewset.as_view(), name='project-detail'),
-    path('api/project/<int:project_id>/users/', ContributorsViewset.as_view(), name='contributors-list'),
-    path('api/project/<int:pk>/users/<int:user_id>/', DeleteContributorViewSet.as_view(), name='contributors-delete'),
-    path('api/project/<int:project_id>/issues/', IssuesViewset.as_view(), name='issue-list'),
-    #path('api/project/<int:pk>/issues/<int:issue_id>/comment/', CommentsViewset, name='comment-list'),
+    path('api/', include(router.urls)),
 ]

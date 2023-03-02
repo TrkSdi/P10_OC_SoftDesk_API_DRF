@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from django.shortcuts import get_object_or_404, render
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet, ViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -11,6 +11,27 @@ from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
                           IssuesSerializer, ContributorsSerializer, CommentsSerializer)
 from ITS.models import Project, Issue, Contributor, Comment
 
+
+
+class ProjectViewset(ModelViewSet):
+    
+    queryset = Project.objects.all()
+    serializer_class = ProjectListSerializer
+    
+    def list(self, request, *args, **kwargs):
+        queryset = Project.objects.filter()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Project.objects.filter()
+        project = get_object_or_404(queryset, pk=pk)
+        serializer = ProjectDetailSerializer(project)
+        return Response(serializer.data)
+    
+
+
+"""
 # Opérationnel
 class ProjectListViewset(ListCreateAPIView):
     queryset = Project.objects.all()
@@ -84,7 +105,7 @@ class CommentsViewset(ReadOnlyModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
-"""
+
 class ProjectViewset(ModelViewSet):
     
     serializer_class = ProjectListSerializer
