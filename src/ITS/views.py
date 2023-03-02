@@ -44,8 +44,38 @@ class ContributorsViewset(ModelViewSet):
         maildrop = get_object_or_404(queryset, pk=pk)
         serializer = ContributorsSerializer(maildrop)
         return Response(serializer.data)
-    
 
+class IssuesViewset(ModelViewSet):
+    
+    queryset = Issue.objects.all()
+    serializer_class = IssuesSerializer
+    
+    def list(self, request, project_pk=None):
+        queryset = Issue.objects.filter(project=project_pk)
+        serializer = IssuesSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, project_pk=None):
+        queryset = Issue.objects.filter(pk=pk, project=project_pk)
+        maildrop = get_object_or_404(queryset, pk=pk)
+        serializer = IssuesSerializer(maildrop)
+        return Response(serializer.data)
+    
+class CommentsViewset(ModelViewSet):   
+    
+    queryset = Comment.objects.all()
+    serializer_class = CommentsSerializer
+
+    def list(self, request, project_pk=None, issue_pk=None):
+        queryset = Comment.objects.filter(issue__project=project_pk, issue=issue_pk)
+        serializer = CommentsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, project_pk=None, issue_pk=None):
+        queryset = Comment.objects.filter(pk=pk, issue__project=project_pk, issue=issue_pk)
+        maildrop = get_object_or_404(queryset, pk=pk)
+        serializer = CommentsSerializer(maildrop)
+        return Response(serializer.data)
 """
 # Opérationnel
 class ProjectListViewset(ListCreateAPIView):
