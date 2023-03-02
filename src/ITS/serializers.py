@@ -34,7 +34,8 @@ class IssuesSerializer(ModelSerializer):
                   'status',
                   'author_user',
                   'assignee_us',
-                  'created_time']
+                  'created_time',
+                  'comment']
         
 class ProjectDetailSerializer(ModelSerializer):
     

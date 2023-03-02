@@ -26,7 +26,7 @@ router = routers.SimpleRouter()
 #router.register('project', ProjectListViewset.as_view(), basename='project')
 #router.register('issues', IssuesViewset, basename='issue')
 #router.register('contributors', ContributorsViewset, basename='contributor')
-router.register('comments', CommentsViewset, basename='comment')
+#router.register('comments', CommentsViewset, basename='comment')
 router.register('user', UserViewset, basename='user')
 
 
@@ -43,6 +43,7 @@ urlpatterns = [
     path('api/project/', ProjectListViewset.as_view(), name='project-list'),
     path('api/project/<int:pk>/', ProjectDetailViewset.as_view(), name='project-detail'),
     path('api/project/<int:project_id>/users/', ContributorsViewset.as_view(), name='contributors-list'),
+    path('api/project/<int:pk>/users/<int:user_id>/', DeleteContributorViewSet.as_view(), name='contributors-delete'),
     path('api/project/<int:project_id>/issues/', IssuesViewset.as_view(), name='issue-list'),
-    path('api/project/<int:pk>/users/<int:user_id>/', DeleteContributorViewSet.as_view(), name='contributors-delete')
+    #path('api/project/<int:pk>/issues/<int:issue_id>/comment/', CommentsViewset, name='comment-list'),
 ]

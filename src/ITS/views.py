@@ -11,16 +11,17 @@ from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
                           IssuesSerializer, ContributorsSerializer, CommentsSerializer)
 from ITS.models import Project, Issue, Contributor, Comment
 
-
+# Opérationnel
 class ProjectListViewset(ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectListSerializer
     
-
+# Opérationnel
 class ProjectDetailViewset(RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectDetailSerializer
 
+# Opérationnel
 class ContributorsViewset(ListCreateAPIView):
     
     queryset = Contributor.objects.all()
@@ -36,18 +37,21 @@ class ContributorsViewset(ListCreateAPIView):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    
+# Ne fonctionne pas    
 class DeleteContributorViewSet(RetrieveDestroyAPIView):
     
     queryset = Contributor.objects.all()
+    serializer_class = ContributorsSerializer
     
     def get_queryset(self):
-        project_id = self.kwargs.get('project_id')
-        queryset = self.queryset.filter(project_id=project_id)
-        contributor = self.kwargs.get('user_id')
-        queryset = self.queryset.filter(user_id=contributor)
+        project_id = self.kwargs.get('pk')
+        project = Project.objects.get(id=project_id)
+        user_id = self.kwargs.get('user_id')
+        queryset = project.contributor.filter(id=user_id)
+        
         return queryset
 
+# Opérationnel
 class IssuesViewset(ListCreateAPIView):
     
     queryset = Issue.objects.all()
@@ -62,7 +66,23 @@ class IssuesViewset(ListCreateAPIView):
         queryset = self.queryset.filter(project_id=project_id)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+# Ne fonctionne pas
+class CommentsViewset(ReadOnlyModelViewSet):
     
+    queryset = Comment.objects.all()
+    serializer_class = CommentsSerializer
+    
+    
+    def perform_create(self, serializer):
+        issue_id = self.kwargs.get('issue_id')
+        return serializer.save(issue_id=issue_id)
+    
+    def list(self, request, *args, **kwargs):
+        issue_id = self.kwargs.get('issue_id')
+        queryset = self.queryset.filter(issue_id=issue_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
     
 """
 class ProjectViewset(ModelViewSet):
@@ -103,10 +123,4 @@ class ProjectViewset(ModelViewSet):
  """
 
     
-class CommentsViewset(ReadOnlyModelViewSet):
-    
-    serializer_class = CommentsSerializer
-    permission_classes = []
-    
-    def get_queryset(self):
-        return Comment.objects.all()
+
