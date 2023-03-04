@@ -2,6 +2,8 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from auth.models import User
 
+
+
 class UserSerializer(ModelSerializer):
     
     class Meta:
@@ -9,29 +11,29 @@ class UserSerializer(ModelSerializer):
         fields = ['id',
                   'first_name',
                   'last_name',
+                  'username',
                   'email',
                   'password']
         
+
 class RegisterSerializer(ModelSerializer):
-    
-    password2 = serializers.CharField(style={'input_type':'password'}, write_only=True)
+    password2 = serializers.CharField(style={'input_type':'password'})
     
     class Meta:
         model = User
         fields = ['first_name',
                   'last_name',
                   'email',
+                  'username',
                   'password',
                   'password2']
-        extra_kwargs = {
-            'password' : {'write_only': True}
-        }
         
     def save(self):
         user = User(
             email = self.validated_data['email'],
             first_name = self.validated_data['first_name'],
-            last_name = self.validated_data['last_name']
+            last_name = self.validated_data['last_name'],
+            username = self.validated_data['username']
         )   
         
         password = self.validated_data['password']
@@ -43,3 +45,7 @@ class RegisterSerializer(ModelSerializer):
         user.save()
         
         return user
+    
+    
+
+

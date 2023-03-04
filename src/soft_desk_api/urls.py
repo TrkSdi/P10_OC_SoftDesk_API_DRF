@@ -18,18 +18,17 @@ from django.urls import include, path
 from rest_framework_nested import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from auth.views import RegisterView
+from auth.views import RegisterView, UserViewset
 from ITS.views import (ProjectViewset, ContributorsViewset, IssuesViewset, CommentsViewset)
 
 router = routers.SimpleRouter()
 router.register('project', ProjectViewset, basename='project')
-
 project_router = routers.NestedSimpleRouter(router, 'project', lookup='project')
 project_router.register('users', ContributorsViewset, basename='contributor')
 project_router.register('issue', IssuesViewset, basename='issue')
-
 issue_router = routers.NestedSimpleRouter(project_router, 'issue', lookup='issue')
 issue_router.register('comment', CommentsViewset, basename='comment' )
+router.register('users', UserViewset, basename='user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

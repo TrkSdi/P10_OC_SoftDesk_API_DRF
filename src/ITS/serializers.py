@@ -3,6 +3,10 @@ from ITS.models import Comment, Contributor, Issue, Project
 
 
 class CommentsSerializer(ModelSerializer):
+    parent_lookup_kwargs = {
+        'project_pk': 'project_pk',
+        'issue_pk': 'issue__project_pk',
+    }
     
     class Meta:
         model = Comment
@@ -13,6 +17,9 @@ class CommentsSerializer(ModelSerializer):
                   'created_time'] 
 
 class ContributorsSerializer(ModelSerializer):
+    parent_lookup_kwargs = {
+        'project_pk': 'project_pk',
+    }
     
     class Meta:
         model = Contributor
@@ -22,6 +29,9 @@ class ContributorsSerializer(ModelSerializer):
                   'role']
 
 class IssuesSerializer(ModelSerializer):
+    parent_lookup_kwargs = {
+        'project_pk': 'project_pk',
+    }
     
     class Meta:
         model = Issue

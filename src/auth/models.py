@@ -7,10 +7,15 @@ class User(AbstractUser):
     
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    username = models.CharField(max_length=30, unique=True)
     email = models.EmailField()
-    username = models.CharField(max_length=30, null=True, blank=True, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    
     
     def __str__(self):
-        if self.first_name == "":
-            return self.username
-        return self.first_name
+        if self.last_name == "":
+            return "Last Name missing"
+        return self.last_name
+    
+    
