@@ -1,27 +1,24 @@
-from django.shortcuts import get_object_or_404, render
-from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet, ViewSet
+from django.shortcuts import get_object_or_404
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.response import Response
-from rest_framework.decorators import action
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView
 from rest_framework import status
-
 
 from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
                           IssuesSerializer, ContributorsSerializer, CommentsSerializer)
-from ITS.models import Project, Issue, Contributor, Comment
-from .permissions import IsProjectOwner
+from .models import Project, Issue, Contributor, Comment
+from .permissions import IsOwnerOrReadOnly
+
 
 
 
 class ProjectViewset(ModelViewSet):
-    
-    queryset = Project.objects.all()
+    queryset = Project.objects.filter()
     serializer_class = ProjectListSerializer
-    permissions_classes = [IsProjectOwner]
+    #permission_classes = [IsOwnerOrReadOnly]
     
     def list(self, request, *args, **kwargs):
         queryset = Project.objects.filter()
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = self.get_serializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -31,9 +28,8 @@ class ProjectViewset(ModelViewSet):
         return Response(serializer.data)
     
 class ContributorsViewset(ModelViewSet):
-    
-    queryset = Contributor.objects.all()
     serializer_class = ContributorsSerializer
+    queryset = Contributor.objects.filter()
     
     def list(self, request, project_pk=None):
         queryset = Contributor.objects.filter(project=project_pk)
@@ -42,14 +38,24 @@ class ContributorsViewset(ModelViewSet):
 
     def retrieve(self, request, pk=None, project_pk=None):
         queryset = Contributor.objects.filter(pk=pk, project=project_pk)
-        maildrop = get_object_or_404(queryset, pk=pk)
-        serializer = ContributorsSerializer(maildrop)
+        contributor = get_object_or_404(queryset, pk=pk)
+        serializer = ContributorsSerializer(contributor)
         return Response(serializer.data)
-
+    
+    def create(self, request, project_pk=None, *args, **kwargs):
+        data = request.data
+        contributor = Contributor.objects.create(user_id=data['user'], 
+                                                     project_id=project_pk, 
+                                                     permission=data['permission'], 
+                                                     role=data['role'])
+        contributor.save()
+        serializer = ContributorsSerializer(contributor)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+                        
 class IssuesViewset(ModelViewSet):
     
-    queryset = Issue.objects.all()
     serializer_class = IssuesSerializer
+    queryset = Issue.objects.filter()
     
     def list(self, request, project_pk=None):
         queryset = Issue.objects.filter(project=project_pk)
@@ -58,13 +64,28 @@ class IssuesViewset(ModelViewSet):
 
     def retrieve(self, request, pk=None, project_pk=None):
         queryset = Issue.objects.filter(pk=pk, project=project_pk)
-        maildrop = get_object_or_404(queryset, pk=pk)
-        serializer = IssuesSerializer(maildrop)
+        issue = get_object_or_404(queryset, pk=pk)
+        serializer = IssuesSerializer(issue)
         return Response(serializer.data)
+    
+    def create(self, request, project_pk=None, *args, **kwargs):
+        data = request.data
+        issue = Issue.objects.create(title=data['title'],  
+                                            description=data['description'], 
+                                            tag=data['tag'],
+                                            priority=data['priority'],
+                                            project_id=project_pk,
+                                            status=data['status'],
+                                            author_user_id=data['author_user'],
+                                            assignee_user_id=data['assignee_user']
+                                            )
+        issue.save()
+        serializer = IssuesSerializer(issue)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class CommentsViewset(ModelViewSet):   
     
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.filter()
     serializer_class = CommentsSerializer
 
     def list(self, request, project_pk=None, issue_pk=None):
@@ -77,3 +98,13 @@ class CommentsViewset(ModelViewSet):
         maildrop = get_object_or_404(queryset, pk=pk)
         serializer = CommentsSerializer(maildrop)
         return Response(serializer.data)
+    
+    def create(self, request, issue_pk=None, *args, **kwargs):
+        data = request.data
+        comment = Comment.objects.create(description=data['description'],
+                                         author_user_id=data['author_user'],
+                                         issue_id=issue_pk,
+                                        )
+        comment.save()
+        serializer = CommentsSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

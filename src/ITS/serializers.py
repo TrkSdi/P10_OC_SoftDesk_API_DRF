@@ -1,24 +1,24 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
+from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from ITS.models import Comment, Contributor, Issue, Project
 
 
 class CommentsSerializer(ModelSerializer):
     parent_lookup_kwargs = {
-        'project_pk': 'project_pk',
-        'issue_pk': 'issue__project_pk',
+        'issue_pk': 'issue__pk',
+        'project_pk': 'issue__project__pk',
     }
-    
+
     class Meta:
         model = Comment
         fields = ['id',
                   'description',
                   'author_user',
-                  'issue',
                   'created_time'] 
 
 class ContributorsSerializer(ModelSerializer):
     parent_lookup_kwargs = {
-        'project_pk': 'project_pk',
+        'project_pk': 'project__pk',
     }
     
     class Meta:
@@ -30,7 +30,7 @@ class ContributorsSerializer(ModelSerializer):
 
 class IssuesSerializer(ModelSerializer):
     parent_lookup_kwargs = {
-        'project_pk': 'project_pk',
+        'project_pk': 'project__pk',
     }
     
     class Meta:
@@ -40,12 +40,10 @@ class IssuesSerializer(ModelSerializer):
                   'description',
                   'tag',
                   'priority',
-                  'project',
                   'status',
                   'author_user',
-                  'assignee_us',
-                  'created_time',
-                  'comment']
+                  'assignee_user',
+                  'created_time',]
         
 class ProjectDetailSerializer(ModelSerializer):
     

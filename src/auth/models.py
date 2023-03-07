@@ -15,7 +15,7 @@ class User(AbstractUser):
     
     def __str__(self):
         if self.last_name == "":
-            return "Last Name missing"
+            return self.username
         return self.last_name
     
     

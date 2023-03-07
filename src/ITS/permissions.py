@@ -1,21 +1,19 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework import permissions
+from .models import Project
 
 
-class IsAdminAuthenticated(BasePermission):
+
+class IsOwnerOrReadOnly(BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user and 
-                    request.user.is_authenticated and 
-                    request.user.is_superuser)
-
-class IsProjectOwner(BasePermission):
+        return True
+            
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS :
             return True
-        return obj.author_user == request.user and request.user.is_authenticated()
+        return obj.author_user == request.user 
 
-class IsIssueOwner(BasePermission):
-    pass
-
-class IsCommentOwber(BasePermission):
-    pass
+class IsProjectContributor(BasePermission):
+    def has_permission(self, request, view):
+        if request.user in Project.contributor:
+            return True
