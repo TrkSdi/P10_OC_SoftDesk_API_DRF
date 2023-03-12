@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.response import Response
+from django.db.models import Q
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
                           IssuesSerializer, ContributorsSerializer, CommentsSerializer)
 from .models import Project, Issue, Contributor, Comment
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsContributor, IsProjectOwner
 
 
 
@@ -14,10 +16,11 @@ from .permissions import IsOwnerOrReadOnly
 class ProjectViewset(ModelViewSet):
     queryset = Project.objects.filter()
     serializer_class = ProjectListSerializer
-    #permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsProjectOwner]
     
     def list(self, request, *args, **kwargs):
-        queryset = Project.objects.filter()
+        queryset = Project.objects.filter(Q(author_user = request.user)|
+                                          Q(contributors__user = request.user)).distinct()
         serializer = self.get_serializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -30,6 +33,8 @@ class ProjectViewset(ModelViewSet):
 class ContributorsViewset(ModelViewSet):
     serializer_class = ContributorsSerializer
     queryset = Contributor.objects.filter()
+    permission_classes = [IsContributor | IsProjectOwner]
+    
     
     def list(self, request, project_pk=None):
         queryset = Contributor.objects.filter(project=project_pk)
@@ -56,6 +61,8 @@ class IssuesViewset(ModelViewSet):
     
     serializer_class = IssuesSerializer
     queryset = Issue.objects.filter()
+    permission_classes = [IsContributor & IsOwnerOrReadOnly]
+    
     
     def list(self, request, project_pk=None):
         queryset = Issue.objects.filter(project=project_pk)
@@ -87,6 +94,8 @@ class CommentsViewset(ModelViewSet):
     
     queryset = Comment.objects.filter()
     serializer_class = CommentsSerializer
+    permission_classes = [IsContributor, IsOwnerOrReadOnly]
+    
 
     def list(self, request, project_pk=None, issue_pk=None):
         queryset = Comment.objects.filter(issue__project=project_pk, issue=issue_pk)
