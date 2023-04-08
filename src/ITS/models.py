@@ -23,13 +23,13 @@ class Project(models.Model):
 class Contributor(models.Model):
     # Revoir permission, role
     PERMISSION = [
-        ('USER', 'USER'),
-        ('SUPERUSER', 'SUPERUSER')
+        ('CO', 'Contributor'),
+        ('PO', 'Project Owner')
     ]
     
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, null=True, blank=True, related_name='contributors')
-    permission = models.CharField(max_length=20, choices=PERMISSION, default='USER')
+    permission = models.CharField(max_length=20, choices=PERMISSION, default='CO')
     role = models.CharField(max_length=20)
     
     def __str__(self):

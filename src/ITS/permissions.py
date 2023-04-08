@@ -4,7 +4,7 @@ from rest_framework import permissions
 from .models import Project, Contributor
 
 
-
+# Propriétaire ou lecture seule
 class IsOwnerOrReadOnly(BasePermission):
     def has_permission(self, request, view):
         return True
@@ -14,6 +14,7 @@ class IsOwnerOrReadOnly(BasePermission):
             return True
         return obj.author_user == request.user 
 
+# Contributeur 
 class IsContributor(BasePermission):
     def has_permission(self, request, view):
         project_id = view.kwargs.get('project_pk')
@@ -22,9 +23,10 @@ class IsContributor(BasePermission):
     
     def has_object_permission(self, request, view, obj):
         return self.has_permission(request, view)
-    
+
+# Propriétaire de projet
 class IsProjectOwner(BasePermission):
-    #GET POST
+    # GET POST
     def has_permission(self, request, view):
         project_id = view.kwargs.get('project_pk')
         project = Project.objects.filter(pk=project_id).first()
