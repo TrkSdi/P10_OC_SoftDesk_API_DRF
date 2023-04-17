@@ -1,7 +1,7 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework import permissions
 from .models import Project, Contributor
+
 
 
 # Propriétaire ou lecture seule
@@ -38,4 +38,9 @@ class IsProjectOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.author_user == request.user
 
+
+### A IMPLEMENTER ###
+class AnonymUser(BasePermission):
+    def has_permission(self, request, view):
+        pass
         

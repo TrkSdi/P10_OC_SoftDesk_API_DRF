@@ -8,15 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
                           IssuesSerializer, ContributorsSerializer, CommentsSerializer)
 from .models import Project, Issue, Contributor, Comment
-from .permissions import IsOwnerOrReadOnly, IsContributor, IsProjectOwner
-
-
+from .permissions import IsOwnerOrReadOnly, IsContributor, IsProjectOwner, AnonymUser
 
 
 class ProjectViewset(ModelViewSet):
     queryset = Project.objects.filter()
     serializer_class = ProjectListSerializer
-    permission_classes = [IsProjectOwner]
+    permission_classes = [IsProjectOwner, IsAuthenticated]
     
     def list(self, request, *args, **kwargs):
         queryset = Project.objects.filter(Q(author_user = request.user)|
@@ -29,6 +27,9 @@ class ProjectViewset(ModelViewSet):
         project = get_object_or_404(queryset, pk=pk)
         serializer = ProjectDetailSerializer(project)
         return Response(serializer.data)
+    
+    def perform_create(self, serializer):
+            serializer.save(author_user=self.request.user)
     
 class ContributorsViewset(ModelViewSet):
     serializer_class = ContributorsSerializer

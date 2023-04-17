@@ -1,7 +1,8 @@
 from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from ITS.models import Comment, Contributor, Issue, Project
-
+from auth.serializers import UserSerializer
+ 
 
 class CommentsSerializer(ModelSerializer):
     parent_lookup_kwargs = {
@@ -60,6 +61,7 @@ class ProjectDetailSerializer(ModelSerializer):
                   'issue',
                   'contributor'
                   ]
+        
 
 class ProjectListSerializer(ModelSerializer):
         
