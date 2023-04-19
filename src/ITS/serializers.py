@@ -1,8 +1,6 @@
-from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
-from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
+from rest_framework.serializers import ModelSerializer
 from ITS.models import Comment, Contributor, Issue, Project
-from auth.serializers import UserSerializer
- 
+
 
 class CommentsSerializer(ModelSerializer):
     parent_lookup_kwargs = {
@@ -15,13 +13,14 @@ class CommentsSerializer(ModelSerializer):
         fields = ['id',
                   'description',
                   'author_user',
-                  'created_time'] 
+                  'created_time']
+
 
 class ContributorsSerializer(ModelSerializer):
     parent_lookup_kwargs = {
         'project_pk': 'project__pk',
     }
-    
+
     class Meta:
         model = Contributor
         fields = ['id',
@@ -29,11 +28,12 @@ class ContributorsSerializer(ModelSerializer):
                   'permission',
                   'role']
 
+
 class IssuesSerializer(ModelSerializer):
     parent_lookup_kwargs = {
         'project_pk': 'project__pk',
     }
-    
+
     class Meta:
         model = Issue
         fields = ['id',
@@ -44,13 +44,14 @@ class IssuesSerializer(ModelSerializer):
                   'status',
                   'author_user',
                   'assignee_user',
-                  'created_time',]
-        
+                  'created_time', ]
+
+
 class ProjectDetailSerializer(ModelSerializer):
-    
+
     issue = IssuesSerializer(many=True, read_only=True)
     contributor = ContributorsSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Project
         fields = ['id',
@@ -61,10 +62,10 @@ class ProjectDetailSerializer(ModelSerializer):
                   'issue',
                   'contributor'
                   ]
-        
+
 
 class ProjectListSerializer(ModelSerializer):
-        
+
     class Meta:
         model = Project
         fields = ['id',
