@@ -142,3 +142,5 @@ SIMPLE_JWT = {
 }
 
 
+
+#'rest_framework.authentication.SessionAuthentication',
