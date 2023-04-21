@@ -85,17 +85,11 @@ class IssuesViewset(ModelViewSet):
                                      priority=data['priority'],
                                      project_id=project_pk,
                                      status=data['status'],
-                                     author_user_id=data['author_user'],
+                                     author_user_id=request.user.id,
                                      assignee_user_id=data['assignee_user'])
         issue.save()
         serializer = IssuesSerializer(issue)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def perform_create(self, serializer):
-        try:
-            serializer.save(author_user=self.request.user)
-        except:
-            serializer.save(user=self.request.user)
 
 
 class CommentsViewset(ModelViewSet):
@@ -118,14 +112,9 @@ class CommentsViewset(ModelViewSet):
     def create(self, request, issue_pk=None, *args, **kwargs):
         data = request.data
         comment = Comment.objects.create(description=data['description'],
-                                         author_user_id=data['author_user'],
+                                         author_user_id=request.user.id,
                                          issue_id=issue_pk,)
         comment.save()
         serializer = CommentsSerializer(comment)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer):
-        try:
-            serializer.save(author_user=self.request.user)
-        except:
-            serializer.save(user=self.request.user)

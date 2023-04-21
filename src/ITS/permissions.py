@@ -4,11 +4,17 @@ from .models import Project, Contributor
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        return True
+        try:
+            project_id = view.kwargs['pk']
+            project = Project.objects.get(pk=project_id)
+            if project.author_user != request.user:
+                return False
+            else:
+                return True
+        except:
+            return True
 
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
         return obj.author_user == request.user
 
 

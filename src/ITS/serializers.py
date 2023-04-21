@@ -33,7 +33,7 @@ class IssuesSerializer(ModelSerializer):
     parent_lookup_kwargs = {
         'project_pk': 'project__pk',
     }
-
+        
     class Meta:
         model = Issue
         fields = ['id',
@@ -42,9 +42,11 @@ class IssuesSerializer(ModelSerializer):
                   'tag',
                   'priority',
                   'status',
-                  'author_user',
                   'assignee_user',
                   'created_time', ]
+        
+        read_only_fields = [
+                  'author_user',]
 
 
 class ProjectDetailSerializer(ModelSerializer):
@@ -52,6 +54,8 @@ class ProjectDetailSerializer(ModelSerializer):
     issue = IssuesSerializer(many=True, read_only=True)
     contributor = ContributorsSerializer(many=True, read_only=True)
 
+    
+    
     class Meta:
         model = Project
         fields = ['id',
@@ -62,6 +66,9 @@ class ProjectDetailSerializer(ModelSerializer):
                   'issue',
                   'contributor'
                   ]
+        
+        
+        
 
 
 class ProjectListSerializer(ModelSerializer):
@@ -73,3 +80,5 @@ class ProjectListSerializer(ModelSerializer):
                   'description',
                   'project_type',
                   'author_user']
+
+
