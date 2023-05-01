@@ -9,13 +9,13 @@ from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
                           IssuesSerializer, ContributorsSerializer,
                           CommentsSerializer)
 from .models import Project, Issue, Contributor, Comment
-from .permissions import IsOwnerOrReadOnly, IsContributor, IsProjectOwner
+from .permissions import IsOwnerOrReadOnly, IsContributor, IsProjectContributor, IsProjectOwner
 
 
 class ProjectViewset(ModelViewSet):
     queryset = Project.objects.filter()
     serializer_class = ProjectListSerializer
-    permission_classes = [IsAuthenticated & IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated & (IsOwnerOrReadOnly | IsProjectContributor)]
 
     def list(self, request, *args, **kwargs):
         queryset = Project.objects.filter(Q(author_user=request.user) |
