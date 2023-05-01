@@ -18,4 +18,8 @@ class User(AbstractUser):
             return self.username
         return self.last_name
     
+    def save(self, *args, **kwargs):
+        self.set_password(self.password)
+        super().save(*args, **kwargs)
+    
     
