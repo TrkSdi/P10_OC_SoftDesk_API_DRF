@@ -12,8 +12,7 @@ class UserSerializer(ModelSerializer):
                   'first_name',
                   'last_name',
                   'username',
-                  'email',
-                  'password']
+                  'email',]
         
 
 class RegisterSerializer(ModelSerializer):

@@ -9,7 +9,8 @@ from .serializers import (ProjectDetailSerializer, ProjectListSerializer,
                           IssuesSerializer, ContributorsSerializer,
                           CommentsSerializer)
 from .models import Project, Issue, Contributor, Comment
-from .permissions import IsOwnerOrReadOnly, IsContributor, IsProjectContributor, IsProjectOwner
+from .permissions import (IsOwnerOrReadOnly, IsContributor,
+                          IsProjectContributor, IsProjectOwner)
 
 
 class ProjectViewset(ModelViewSet):
